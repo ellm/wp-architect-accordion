@@ -37,6 +37,8 @@ function wp_arch_accord_init() {
 
     // Create funtion to enqueue plugin scripts and styles
     function wp_arch_accord_scripts_styles() {
+        
+        if ( !is_admin() ) {
          
         wp_enqueue_script('jquery-ui-accordion');
          
@@ -45,6 +47,8 @@ function wp_arch_accord_init() {
 
         // enqueue css
         wp_enqueue_style('wp_arch_accord_styles', 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', array(), '01', 'all');
+        
+        }
 
     }
 }
