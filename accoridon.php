@@ -37,11 +37,11 @@ function wp_arch_accord_init() {
 
     // Create funtion to enqueue plugin scripts and styles
     function wp_arch_accord_scripts_styles() {
-
+         
+        wp_enqueue_script('jquery-ui-accordion');
+         
         // enqueue script | @Dependents: jQuery
-        wp_enqueue_script('wp_arch_accord_script', plugins_url('accordion.js', __FILE__), array('wp_arch_jquery','wp_arch_accord_ui_accordian'), "1", true);
-
-        wp_enqueue_script('wp_arch_accord_ui_accordian', 'http://code.jquery.com/ui/1.10.3/jquery-ui.js', array('wp_arch_jquery'), "1", true);
+        wp_enqueue_script('wp_arch_accord_script', plugins_url('accordion.js', __FILE__), array('jquery','jquery-ui-accordion'), "1", true);
 
         // enqueue css
         wp_enqueue_style('wp_arch_accord_styles', 'http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css', array(), '01', 'all');
