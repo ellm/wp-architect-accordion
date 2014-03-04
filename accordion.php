@@ -12,31 +12,50 @@ Author URI: http://www.matthewell.com
 */
 
 function wp_arch_accord_init() {
+    // Remove empty p tags for custom shortcodes
+    // https://gist.github.com/bitfade/4555047
+    // http://themeforest.net/forums/thread/how-to-add-shortcodes-in-wp-themes-without-being-rejected/98804?page=4#996848
+    add_filter("the_content", "the_content_filter");
+     
+    function the_content_filter($content) {
+     
+        // array of custom shortcodes requiring the fix 
+        $block = join("|",array("accordions","accordion-title","accordion-block"));
+     
+        // opening tag
+        $rep = preg_replace("/(<p>)?\[($block)(\s[^\]]+)?\](<\/p>|<br \/>)?/","[$2$3]",$content);
+            
+        // closing tag
+        $rep = preg_replace("/(<p>)?\[\/($block)](<\/p>|<br \/>)?/","[/$2]",$rep);
+     
+        return $rep;
+     
+    }
 
-    // Create Short Code for Wrapping Accordian
-    function wp_arch_accord_wrap ( $atts, $content = null ) {
+    // Create ShortCode for Wrapping Accordian
+    //$args is reserved to pass containing shortcodes
+    function wp_arch_accord_wrap ( $args, $content = null ) {
+        // do_shortcode() will seach through $content and filter through hooks
        return '<div class="accordion">' . do_shortcode($content) . '</div>';
     }
-
     add_shortcode( 'accordions', 'wp_arch_accord_wrap' );
 
-    // Create Short Code for Accordian
-    function wp_arch_accord_block( $atts ) {
-        extract( shortcode_atts( array(
-            'title' => 'accordion title',
-            'content' => 'accordion content',
-        ), $atts ) );
-
-        return '<h3>'. $title . '</h3>' . '<div><p>' . $content . '</p></div>';
+    // Create Shortcode for Title of Accordion
+    function wp_arch_accord_title ( $args, $content = null )  {
+        return '<h3>' . $content . '</h3>';
     }
-
-    add_shortcode( 'accordion', 'wp_arch_accord_block' );
+    add_shortcode( 'accordion-title', 'wp_arch_accord_title' );
+    
+    // Create Short Code for Content area of Accordion
+    function wp_arch_accord_block( $args, $content = null ) {
+        return '<div>' . wpautop($content) . '</div>';
+    }
+    add_shortcode( 'accordion-block', 'wp_arch_accord_block' );
 
     // Hook into enqueue script action with plugin scritps and styles
     add_action( 'wp_enqueue_scripts', 'wp_arch_accord_scripts_styles', 999);
 
-    // Create funtion to enqueue plugin scripts and styles
-    
+    // Create funtion to enqueue plugin scripts and styles    
     function wp_arch_accord_scripts_styles() {
         
         // To access a global variable in your code, you first need to globalize the variable with
