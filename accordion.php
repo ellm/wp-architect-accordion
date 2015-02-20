@@ -61,20 +61,23 @@ function wp_arch_accord_init() {
         // To access a global variable in your code, you first need to globalize the variable with
         // ref: http://codex.wordpress.org/Global_Variables
         global $post;
+        // Check to make sure the $post object is available (Fixes notice when $post is not avialable)
+        if ( !empty($post) ) {
         
-        // If is not admin AND has accordion shortcode in post load scripts and styles
-        if ( !is_admin() && has_shortcode( $post->post_content, 'accordions') ) {
+            // If is not admin AND has accordion shortcode in post load scripts and styles
+            if ( !is_admin() && has_shortcode( $post->post_content, 'accordions') ) {
          
-        // enqueue script | WordPress jQuery Accordion 
-        wp_enqueue_script('jquery-ui-accordion');
+                // enqueue script | WordPress jQuery Accordion 
+                wp_enqueue_script('jquery-ui-accordion');
          
-        // enqueue script | @Dependents: jQuery
-        wp_enqueue_script('wp_arch_accord_script', plugins_url('accordion.js', __FILE__), array('jquery','jquery-ui-accordion'), "1", true);
+                // enqueue script | @Dependents: jQuery
+                wp_enqueue_script('wp_arch_accord_script', plugins_url('accordion.js', __FILE__), array('jquery','jquery-ui-accordion'), "1", true);
 
-        // enqueue css | External 
-        // http://stackoverflow.com/questions/820412/downloading-jquery-ui-css-from-googles-cdn
-        wp_enqueue_style('wp_arch_accord_styles', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css', array(), '01', 'all');
-        
+                // enqueue css | External 
+                // http://stackoverflow.com/questions/820412/downloading-jquery-ui-css-from-googles-cdn
+                wp_enqueue_style('wp_arch_accord_styles', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/smoothness/jquery-ui.min.css', array(), '01', 'all');
+    
+            }
         }
 
     }
